@@ -6,20 +6,20 @@ interface ArticlePreviewProps {
     image: string;
   };
   createdAt: string;
-  favoriteCount: number;
+  favoritesCount: number;
   title: string;
   description: string;
-  tags: string[];
+  tagList: string[];
 }
 
 // 구조분해 할당 https://ko.javascript.info/destructuring-assignment
 const ArticlePreview = ({
   author,
   createdAt,
-  favoriteCount,
+  favoritesCount,
   title,
   description,
-  tags,
+  tagList,
 }: ArticlePreviewProps) => {
   return (
     <div className="article-preview">
@@ -36,7 +36,7 @@ const ArticlePreview = ({
         <div className="pull-xs-right">
           <button className="btn btn-sm btn-outline-primary">
             <i className="ion-heart"></i>
-            {favoriteCount}
+            {favoritesCount}
           </button>
         </div>
       </div>
@@ -45,7 +45,7 @@ const ArticlePreview = ({
         <p>{description}</p>
         <span>Read more...</span>
         <ul className="tag-list">
-          {tags.map((tag) => (
+          {tagList.map((tag) => (
             <li key={tag} className="tag-default tag-pill tag-outline">
               {tag}
             </li>

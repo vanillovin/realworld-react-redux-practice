@@ -14,29 +14,21 @@ type Article = {
   };
   createdAt: string;
   updatedAt: string;
-  favoriteCount: number;
+  favoritesCount: number;
   title: string;
   description: string;
-  tags: string[];
-};
-
-const article: Article = {
-  slug: 'Create-a-new-implementation',
-  author: {
-    username: 'Gerome',
-    image: 'https://api.realworld.io/images/demo-avatar.png',
-  },
-  createdAt: 'Wed Nov 24 2021',
-  updatedAt: 'Wed Nov 24 2021',
-  favoriteCount: 452,
-  title: 'Create a new implementation',
-  description: 'join the community by creating a new implementation',
-  tags: ['implementations'],
+  tagList: string[];
 };
 
 function Home() {
   //https://react-redux.realworld.io/#/?_k=z6qyc9
-  const [articleList, setArticleList] = useState([article, article, article]);
+  const [articleList, setArticleList] = useState<Article[]>([]);
+
+  useEffect(() => {
+    fetch(`https://api.realworld.io/api/articles?limit=10&offset=0`)
+      .then((res) => res.json())
+      .then((body) => setArticleList(body.articles));
+  }, [setArticleList]);
 
   return (
     <div id="main">
@@ -63,7 +55,7 @@ function Home() {
                 </div>
                 <div>
                   {articleList.map((article) => (
-                    <ArticlePreview {...article} />
+                    <ArticlePreview key={article.slug} {...article} />
                   ))}
                 </div>
               </div>
