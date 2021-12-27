@@ -2,20 +2,41 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../../components/NavBar';
 import ArticlePreview from '../../components/ArticlePreview';
 
+// type va interface (넓은 개념)
+// (컴포넌트와 컴포넌트 사이의 props)
+// 객체와 다른 프로그램 사이에
+
+type Article = {
+  slug: string;
+  author: {
+    username: string;
+    image: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  favoriteCount: number;
+  title: string;
+  description: string;
+  tags: string[];
+};
+
+const article: Article = {
+  slug: 'Create-a-new-implementation',
+  author: {
+    username: 'Gerome',
+    image: 'https://api.realworld.io/images/demo-avatar.png',
+  },
+  createdAt: 'Wed Nov 24 2021',
+  updatedAt: 'Wed Nov 24 2021',
+  favoriteCount: 452,
+  title: 'Create a new implementation',
+  description: 'join the community by creating a new implementation',
+  tags: ['implementations'],
+};
+
 function Home() {
   //https://react-redux.realworld.io/#/?_k=z6qyc9
-
-  const article = {
-    author: {
-      username: 'Gerome',
-      image: 'https://api.realworld.io/images/demo-avatar.png',
-    },
-    createdAt: 'Wed Nov 24 2021',
-    favoriteCount: 452,
-    title: 'Create a new implementation',
-    description: 'join the community by creating a new implementation',
-    tags: ['implementations'],
-  };
+  const [articleList, setArticleList] = useState([article, article, article]);
 
   return (
     <div id="main">
@@ -41,9 +62,9 @@ function Home() {
                   </ul>
                 </div>
                 <div>
-                  <ArticlePreview {...article} />
-                  <ArticlePreview {...article} />
-                  <ArticlePreview {...article} />
+                  {articleList.map((article) => (
+                    <ArticlePreview {...article} />
+                  ))}
                 </div>
               </div>
               <div className="col-md-3">
