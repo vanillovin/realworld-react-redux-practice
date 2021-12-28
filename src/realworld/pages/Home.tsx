@@ -29,7 +29,13 @@ type Article = {
 // 내부에 있지 않아도 되는 건 밖에 안에있는 게 좋은 경우도 있음.
 function Home() {
   // https://react-query.tanstack.com/overview
-  const { isLoading, error, data } = useQuery<Article[]>('Articles', () =>
+  const { isLoading, error, data } = useQuery<
+    {
+      articles: Article[];
+      articlesCount: number;
+    },
+    Error
+  >('Articles', () =>
     fetch('https://api.realworld.io/api/articles?limit=10&offset=0').then(
       (res) => res.json()
     )
@@ -72,7 +78,7 @@ function Home() {
                   </button>
                   {error?.message}
                   {isLoading && '로딩중'}
-                  {data?.map((article) => (
+                  {data?.articles.map((article) => (
                     <ArticlePreview key={article.slug} {...article} />
                   ))}
                 </div>
