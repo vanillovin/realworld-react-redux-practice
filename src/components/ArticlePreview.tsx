@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface ArticlePreviewProps {
+  slug: string;
   author: {
     username: string;
     image: string;
@@ -14,6 +16,7 @@ interface ArticlePreviewProps {
 
 // 구조분해 할당 https://ko.javascript.info/destructuring-assignment
 const ArticlePreview = ({
+  slug,
   author,
   createdAt,
   favoritesCount,
@@ -40,7 +43,7 @@ const ArticlePreview = ({
           </button>
         </div>
       </div>
-      <a className="preview-link" href="#article/Create-a-new-implementation-1">
+      <Link className="preview-link" to={'/article/' + slug}>
         <h1>{title}</h1>
         <p>{description}</p>
         <span>Read more...</span>
@@ -51,7 +54,7 @@ const ArticlePreview = ({
             </li>
           ))}
         </ul>
-      </a>
+      </Link>
     </div>
   );
 };

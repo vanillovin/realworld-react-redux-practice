@@ -21,7 +21,7 @@ type Article = {
   tagList: string[];
 };
 
-//
+// https://react-redux.realworld.io/
 // refactor: useQuery로 articleList 상태 관리
 
 // 추상화... 코드를 사람처럼 생각 (주방장과 손님) 주방장 함수 ><ㅡㅏ>?
@@ -44,51 +44,46 @@ function Home() {
   const queryClient = useQueryClient();
 
   return (
-    <div id="main">
-      <div data-reactroot="">
-        <NavBar />
-        <div className="home-page">
-          <div className="banner">
-            <div className="container">
-              <h1 className="logo-font">conduit</h1>
-              <p>A place to share your knowledge.</p>
+    <div className="home-page">
+      <div className="banner">
+        <div className="container">
+          <h1 className="logo-font">conduit</h1>
+          <p>A place to share your knowledge.</p>
+        </div>
+      </div>
+      <div className="container page">
+        <div className="row">
+          <div className="col-md-9">
+            <div className="feed-toggle">
+              <ul className="nav nav-pills outline-active">
+                <li className="nav-item">
+                  <a href="" className="nav-link active">
+                    Global Feed
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <button
+                onClick={() => {
+                  // https://react-query.tanstack.com/guides/query-invalidation
+                  // https://react-query.tanstack.com/reference/useQueryClient#_top
+                  queryClient.invalidateQueries('Articles');
+                }}
+              >
+                다시 요청하기
+              </button>
+              {error?.message}
+              {isLoading && '로딩중'}
+              {data?.articles.map((article) => (
+                <ArticlePreview key={article.slug} {...article} />
+              ))}
             </div>
           </div>
-          <div className="container page">
-            <div className="row">
-              <div className="col-md-9">
-                <div className="feed-toggle">
-                  <ul className="nav nav-pills outline-active">
-                    <li className="nav-item">
-                      <a href="" className="nav-link active">
-                        Global Feed
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <button
-                    onClick={() => {
-                      // https://react-query.tanstack.com/guides/query-invalidation
-                      // https://react-query.tanstack.com/reference/useQueryClient#_top
-                      queryClient.invalidateQueries('Articles');
-                    }}
-                  >
-                    다시 요청하기
-                  </button>
-                  {error?.message}
-                  {isLoading && '로딩중'}
-                  {data?.articles.map((article) => (
-                    <ArticlePreview key={article.slug} {...article} />
-                  ))}
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="sidebar">
-                  <p>Popular Tags</p>
-                  <div className="tag-list"></div>
-                </div>
-              </div>
+          <div className="col-md-3">
+            <div className="sidebar">
+              <p>Popular Tags</p>
+              <div className="tag-list"></div>
             </div>
           </div>
         </div>
