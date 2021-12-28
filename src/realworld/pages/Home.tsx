@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../../components/NavBar';
 import ArticlePreview from '../../components/ArticlePreview';
 
-// type va interface (넓은 개념)
+// type vs interface (넓은 개념)
 // (컴포넌트와 컴포넌트 사이의 props)
 // 객체와 다른 프로그램 사이에
 
@@ -20,15 +20,43 @@ type Article = {
   tagList: string[];
 };
 
-function Home() {
-  //https://react-redux.realworld.io/#/?_k=z6qyc9
-  const [articleList, setArticleList] = useState<Article[]>([]);
+// apiArticleList 분리
 
-  useEffect(() => {
+// 추상화... 코드를 사람처럼 생각 (주방장과 손님) 주방장 함수 ><ㅡㅏ>?
+// 코드 쪼개기의 원칙. 서로 연결된 로직들은 응집력
+// 내부에 있지 않아도 되는 건 밖에 안에있는 게 좋은 경우도 있음.
+function Home() {
+  // https://react-redux.realworld.io/#/?_k=z6qyc9
+  const [articleList, setArticleList] = useState<Article[] | undefined>(
+    undefined
+  );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(undefined);
+  // (REACT HOOK 작동 방식 공부)
+  // dependency array 의존성 배열
+  // https://velog.io/@velopert/react-hooks#2-useeffect
+
+  function fetchArticles() {
+    setLoading(true);
+    setLoading(undefined);
+
     fetch(`https://api.realworld.io/api/articles?limit=10&offset=0`)
       .then((res) => res.json())
-      .then((body) => setArticleList(body.articles));
+      .then((body) => setArticleList(body.articles))
+      .catch(setError)
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  useEffect(() => {
+    // couter 예시 연습, error refetch
+    // 처음 mount 될 때
+    // 의존성 배열에 있는 상태가 업데이트될 때~
+    fetchArticles();
   }, [setArticleList]);
+
+  // 매 렌더링마다 다시 계산하거나, 호출하고 싶으면... useEffect 밖에!
 
   return (
     <div id="main">
@@ -54,7 +82,16 @@ function Home() {
                   </ul>
                 </div>
                 <div>
-                  {articleList.map((article) => (
+                  <button
+                    onClick={() => {
+                      fetchArticles();
+                    }}
+                  >
+                    다시 요청하기
+                  </button>
+                  {error?.message}
+                  {loading && '로딩중'}
+                  {articleList?.map((article) => (
                     <ArticlePreview key={article.slug} {...article} />
                   ))}
                 </div>
