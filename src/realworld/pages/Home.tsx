@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../../components/NavBar';
 import ArticlePreview from '../../components/ArticlePreview';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 // type vs interface (넓은 개념)
 // (컴포넌트와 컴포넌트 사이의 props)
@@ -35,6 +35,8 @@ function Home() {
     )
   );
 
+  const queryClient = useQueryClient();
+
   return (
     <div id="main">
       <div data-reactroot="">
@@ -61,7 +63,9 @@ function Home() {
                 <div>
                   <button
                     onClick={() => {
-                      fetchArticles();
+                      // https://react-query.tanstack.com/guides/query-invalidation
+                      // https://react-query.tanstack.com/reference/useQueryClient#_top
+                      queryClient.invalidateQueries('Articles');
                     }}
                   >
                     다시 요청하기
