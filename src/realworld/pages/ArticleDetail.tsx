@@ -1,20 +1,82 @@
 import React from 'react';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+// javascript 경로시스템 - 상대경로
+// src(root)/components/... 절대경로
+import TagList from '../components/TagList';
+
+type Article = {
+  author: {
+    username: string;
+    bio: string;
+    image: string;
+    followedBy: object[];
+    following: boolean;
+  };
+  body: string;
+  createdAt: string;
+  description: string;
+  favorited: boolean;
+  favoritesCount: string;
+  slug: string;
+  tagList: string[];
+  title: string;
+  updatedAt: string;
+};
+
+type ArticleResponse = {
+  article: Article;
+};
 
 function ArticleDetail() {
+  // slug 를 useParams
+  const { slug } = useParams();
+
+  // api/articles/:slug 에서 데이터를 받아와야 한다
+  // https://api.realworld.io/api/articles/Create-a-new-implementation-1
+
+  const { isLoading, error, data } = useQuery<ArticleResponse>(
+    `Article/${slug}`,
+    () =>
+      fetch(`https://api.realworld.io/api/articles/${slug}`).then((res) =>
+        res.json()
+      )
+  );
+  console.log(data);
+
+  // api/articles/:slug/comments 에서 댓글 데이터를 받아와야
+  // Comment 컴포넌트 분리하기
+
+  if (data === undefined) {
+    return <span>로딩 중</span>;
+  }
+
+  const {
+    author: { username, image },
+    body,
+    createdAt,
+    description,
+    favorited,
+    favoritesCount,
+    tagList,
+    title,
+    updatedAt,
+  } = data.article;
+
   return (
     <div className="article-page">
       <div className="banner">
         <div className="container">
-          <h1>Create a new implementation</h1>
+          <h1>{title}</h1>
           <div className="article-meta">
-            <a className="" href="#@Gerome">
-              <img src="https://api.realworld.io/images/demo-avatar.png" />
+            <a className="" href={'#@' + username}>
+              <img src={image} />
             </a>
             <div className="info">
-              <a className="author" href="#@Gerome">
-                Gerome
+              <a className="author" href={'#@' + username}>
+                {username}
               </a>
-              <span className="date">Wed Nov 24 2021</span>
+              <span className="date">{updatedAt}</span>
             </div>
             <span></span>
           </div>
@@ -24,16 +86,9 @@ function ArticleDetail() {
         <div className="row article-content">
           <div className="col-xs-12">
             <div>
-              <p>
-                Share your knowledge and enpower the community by creating a new
-                implementation
-              </p>
+              <p>{body}</p>
             </div>
-            <ul className="tag-list">
-              <li className="tag-default tag-pill tag-outline">
-                implementations
-              </li>
-            </ul>
+            <TagList tagList={tagList} />
           </div>
         </div>
         <hr />

@@ -3,8 +3,9 @@ import React from 'react';
 import Home from './realworld/pages/Home';
 import './style.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import NavBar from './components/NavBar';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { HashRouter, Routes, Route } from 'react-router-dom';
+import NavBar from './realworld/components/NavBar';
 import ArticleDetail from './realworld/pages/ArticleDetail';
 
 const queryClient = new QueryClient();
@@ -15,13 +16,14 @@ function App() {
   // https://reactrouter.com/docs/en/v6/getting-started/tutorial#connect-the-url
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <HashRouter>
         <NavBar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/article/:slug" element={<ArticleDetail />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

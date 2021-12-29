@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import NavBar from '../../components/NavBar';
-import ArticlePreview from '../../components/ArticlePreview';
+import NavBar from '../components/NavBar';
+import ArticlePreview from '../components/ArticlePreview';
 import { useQuery, useQueryClient } from 'react-query';
 
 // type vs interface (넓은 개념)
@@ -24,21 +24,19 @@ type Article = {
 // https://react-redux.realworld.io/
 // refactor: useQuery로 articleList 상태 관리
 
-// 추상화... 코드를 사람처럼 생각 (주방장과 손님) 주방장 함수 ><ㅡㅏ>?
-// 코드 쪼개기의 원칙. 서로 연결된 로직들은 응집력
-// 내부에 있지 않아도 되는 건 밖에 안에있는 게 좋은 경우도 있음.
+interface ArticlesResponse {
+  articles: Article[];
+  articlesCount: number;
+}
+
 function Home() {
   // https://react-query.tanstack.com/overview
-  const { isLoading, error, data } = useQuery<
-    {
-      articles: Article[];
-      articlesCount: number;
-    },
-    Error
-  >('Articles', () =>
-    fetch('https://api.realworld.io/api/articles?limit=10&offset=0').then(
-      (res) => res.json()
-    )
+  const { isLoading, error, data } = useQuery<ArticlesResponse, Error>(
+    'Articles',
+    () =>
+      fetch('https://api.realworld.io/api/articles?limit=10&offset=0').then(
+        (res) => res.json()
+      )
   );
 
   const queryClient = useQueryClient();

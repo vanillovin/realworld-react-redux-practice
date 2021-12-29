@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import TagList from './TagList';
 
 interface ArticlePreviewProps {
   slug: string;
@@ -47,13 +48,7 @@ const ArticlePreview = ({
         <h1>{title}</h1>
         <p>{description}</p>
         <span>Read more...</span>
-        <ul className="tag-list">
-          {tagList.map((tag) => (
-            <li key={tag} className="tag-default tag-pill tag-outline">
-              {tag}
-            </li>
-          ))}
-        </ul>
+        <TagList tagList={tagList} />
       </Link>
     </div>
   );
