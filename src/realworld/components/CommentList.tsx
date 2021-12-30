@@ -1,5 +1,6 @@
 import React from 'react';
 import { useQuery } from 'react-query';
+import { formatDate } from '../DateFormat';
 
 interface CommentListProps {
   slug: string;
@@ -47,7 +48,7 @@ const CommentList = ({ slug }: CommentListProps) => {
             <a className="comment-author" href={'#' + username}>
               {username}
             </a>
-            <span className="date-posted">{updatedAt}</span>
+            <span className="date-posted">{formatDate(updatedAt)}</span>
           </div>
         </div>
       ))}

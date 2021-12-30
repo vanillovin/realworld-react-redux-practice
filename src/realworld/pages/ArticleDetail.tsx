@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 // src(root)/components/... 절대경로
 import TagList from '../components/TagList';
 import CommentList from '../components/CommentList';
+import { formatDate } from '../DateFormat';
 
 type Article = {
   author: {
@@ -74,7 +75,8 @@ function ArticleDetail() {
               <a className="author" href={'#@' + username}>
                 {username}
               </a>
-              <span className="date">{updatedAt}</span>
+              {/* 전역 - 의존 */}
+              <span className="date">{formatDate(updatedAt)}</span>
             </div>
             <span></span>
           </div>
