@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 // javascript 경로시스템 - 상대경로
 // src(root)/components/... 절대경로
 import TagList from '../components/TagList';
+import CommentList from '../components/CommentList';
 
 type Article = {
   author: {
@@ -34,6 +35,7 @@ function ArticleDetail() {
 
   // api/articles/:slug 에서 데이터를 받아와야 한다
   // https://api.realworld.io/api/articles/Create-a-new-implementation-1
+  // https://api.realworld.io/api/articles/Create-a-new-implementation-1/comments
 
   const { isLoading, error, data } = useQuery<ArticleResponse>(
     `Article/${slug}`,
@@ -42,10 +44,6 @@ function ArticleDetail() {
         res.json()
       )
   );
-  console.log(data);
-
-  // api/articles/:slug/comments 에서 댓글 데이터를 받아와야
-  // Comment 컴포넌트 분리하기
 
   if (data === undefined) {
     return <span>로딩 중</span>;
@@ -105,51 +103,7 @@ function ArticleDetail() {
               </a>
               &nbsp;to add comments on this article.
             </p>
-            <div>
-              <div className="card">
-                <div className="card-block">
-                  <p className="card-text">
-                    Before starting a new implementation, please check if there
-                    is any work in progress for the stack you want to work on.
-                  </p>
-                </div>
-                <div className="card-footer">
-                  <a className="comment-author" href="#@Gerome">
-                    <img
-                      src="https://api.realworld.io/images/demo-avatar.png"
-                      className="comment-author-img"
-                    />
-                  </a>
-                  &nbsp;
-                  <a className="comment-author" href="#@Gerome">
-                    Gerome
-                  </a>
-                  <span className="date-posted">Wed Nov 24 2021</span>
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-block">
-                  <p className="card-text">
-                    If someone else has started working on an implementation,
-                    consider jumping in and helping them! by contacting the
-                    author.
-                  </p>
-                </div>
-                <div className="card-footer">
-                  <a className="comment-author" href="#@Gerome">
-                    <img
-                      src="https://api.realworld.io/images/demo-avatar.png"
-                      className="comment-author-img"
-                    />
-                  </a>
-                  &nbsp;
-                  <a className="comment-author" href="#@Gerome">
-                    Gerome
-                  </a>
-                  <span className="date-posted">Wed Nov 24 2021</span>
-                </div>
-              </div>
-            </div>
+            <CommentList slug={slug} />
           </div>
         </div>
       </div>
