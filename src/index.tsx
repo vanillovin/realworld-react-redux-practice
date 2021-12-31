@@ -7,6 +7,9 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import NavBar from './realworld/components/NavBar';
 import ArticleDetail from './realworld/pages/ArticleDetail';
+import { LOGIN, REGISTER } from './path';
+import SignIn from './realworld/pages/SignIn';
+import SignUp from './realworld/pages/SignUp';
 
 const queryClient = new QueryClient();
 
@@ -21,6 +24,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/article/:slug" element={<ArticleDetail />} />
+          <Route path={LOGIN} element={<SignIn />} />
+          <Route path={REGISTER} element={<SignUp />} />
         </Routes>
       </HashRouter>
       <ReactQueryDevtools initialIsOpen={false} />

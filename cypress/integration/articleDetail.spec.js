@@ -8,12 +8,6 @@ describe('article 상세 페이지', () => {
 
   it('게시글 상세에는 저자, 작성한 날짜, 제목, 본문, 태그 목록이 있다', () => {
     // within 을 사용해서 이 preview 안에서만 찾게 해줍니다.
-
-    /*
-    <a className="author" href={'#@' + username}>
-      {username}
-    </a>
-    */
     cy.get('.author').contains('Gerome');
     cy.get('.date').contains('Wed Nov 24 2021');
     cy.get('h1').contains('Create a new implementation');
