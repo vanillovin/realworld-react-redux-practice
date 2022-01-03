@@ -10,22 +10,15 @@ import ArticleDetail from './realworld/pages/ArticleDetail';
 import { LOGIN, REGISTER } from './path';
 import SignIn from './realworld/pages/SignIn';
 import SignUp from './realworld/pages/SignUp';
+import {
+  CurrentUserContext,
+  SetCurrentUserContext,
+  User,
+} from './CurrentUserContext';
 
 const queryClient = new QueryClient();
 
 // https://ko.reactjs.org/docs/hooks-reference.html#usecontext
-
-const CurrentUserContext = React.createContext<null | User>(null);
-const SetCurrentUserContext = React.createContext<
-  React.Dispatch<React.SetStateAction<null | User>>
->(() => {});
-
-type User = {
-  email: string;
-  username: string;
-  image: string;
-  token: string;
-};
 
 function App() {
   // history vs hash(spa)
