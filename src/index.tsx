@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, { useState } from 'react';
 import Home from './realworld/pages/Home';
 import './style.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -13,23 +13,43 @@ import SignUp from './realworld/pages/SignUp';
 
 const queryClient = new QueryClient();
 
+// https://ko.reactjs.org/docs/hooks-reference.html#usecontext
+
+const CurrentUserContext = React.createContext<null | User>(null);
+const SetCurrentUserContext = React.createContext<
+  React.Dispatch<React.SetStateAction<null | User>>
+>(() => {});
+
+type User = {
+  email: string;
+  username: string;
+  image: string;
+  token: string;
+};
+
 function App() {
   // history vs hash(spa)
   // https://reactrouter.com/docs/en/v6/getting-started/tutorial
   // https://reactrouter.com/docs/en/v6/getting-started/tutorial#connect-the-url
+  const [currentUser, setCurrentUser] = useState<null | User>(null);
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <HashRouter>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/article/:slug" element={<ArticleDetail />} />
-          <Route path={LOGIN} element={<SignIn />} />
-          <Route path={REGISTER} element={<SignUp />} />
-        </Routes>
-      </HashRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <CurrentUserContext.Provider value={currentUser}>
+      <SetCurrentUserContext.Provider value={setCurrentUser}>
+        <QueryClientProvider client={queryClient}>
+          <HashRouter>
+            <NavBar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/article/:slug" element={<ArticleDetail />} />
+              <Route path={LOGIN} element={<SignIn />} />
+              <Route path={REGISTER} element={<SignUp />} />
+            </Routes>
+          </HashRouter>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </SetCurrentUserContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }
 
