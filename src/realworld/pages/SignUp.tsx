@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { SetCurrentUserContext } from '../../CurrentUserContext';
 import { EMAIL_OPTION, PASSWORD_OPTION } from '../validation';
 
 interface SignUpFD {
@@ -21,9 +23,20 @@ const SignUp = () => {
       password: '',
     },
   });
+  const setCurrentUser = useContext(SetCurrentUserContext);
+  const navigate = useNavigate();
 
   const onSubmit = (data: SignUpFD) => {
-    alert(JSON.stringify(data));
+    console.log('onSubmit data', data);
+
+    setCurrentUser({
+      email: data.email,
+      username: '사용자',
+      token: 'test',
+      image: 'https://api.realworld.io/images/demo-avatar.png',
+    });
+
+    navigate('/');
   };
   console.log('errors', errors);
 

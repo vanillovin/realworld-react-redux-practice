@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { SetCurrentUserContext } from '../../CurrentUserContext';
 import { EMAIL_OPTION, PASSWORD_OPTION } from '../validation';
 
 interface SignInFormData {
@@ -16,7 +18,26 @@ function SignIn() {
       password: '',
     },
   });
-  const onSubmit = (data: SignInFormData) => alert(JSON.stringify(data));
+
+  const setCurrentUser = useContext(SetCurrentUserContext);
+
+  // v6 useHistory -> useNavigate
+  // https://velog.io/@soryeongk/ReactRouterDomV6
+  // 공식문서 migration guide 참고
+  const navigate = useNavigate();
+
+  const onSubmit = (data: SignInFormData) => {
+    console.log('onSubmit data', data);
+
+    setCurrentUser({
+      email: data.email,
+      username: '사용자',
+      token: 'test',
+      image: 'https://api.realworld.io/images/demo-avatar.png',
+    });
+
+    navigate('/');
+  };
 
   return (
     <div className="auth-page">
