@@ -10,11 +10,6 @@ import ArticleDetail from './realworld/pages/ArticleDetail';
 import { LOGIN, REGISTER } from './path';
 import SignIn from './realworld/pages/SignIn';
 import SignUp from './realworld/pages/SignUp';
-import {
-  CurrentUserContext,
-  SetCurrentUserContext,
-  User,
-} from './CurrentUserContext';
 
 const queryClient = new QueryClient();
 
@@ -24,25 +19,22 @@ function App() {
   // history vs hash(spa)
   // https://reactrouter.com/docs/en/v6/getting-started/tutorial
   // https://reactrouter.com/docs/en/v6/getting-started/tutorial#connect-the-url
-  const [currentUser, setCurrentUser] = useState<null | User>(null);
+
+  // /articles?tag=welcome&limit=10&offset=0
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-      <SetCurrentUserContext.Provider value={setCurrentUser}>
-        <QueryClientProvider client={queryClient}>
-          <HashRouter>
-            <NavBar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/article/:slug" element={<ArticleDetail />} />
-              <Route path={LOGIN} element={<SignIn />} />
-              <Route path={REGISTER} element={<SignUp />} />
-            </Routes>
-          </HashRouter>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </SetCurrentUserContext.Provider>
-    </CurrentUserContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/article/:slug" element={<ArticleDetail />} />
+          <Route path={LOGIN} element={<SignIn />} />
+          <Route path={REGISTER} element={<SignUp />} />
+        </Routes>
+      </HashRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 

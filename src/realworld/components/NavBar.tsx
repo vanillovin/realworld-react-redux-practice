@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { LOGIN, REGISTER } from '../../path';
 import { CurrentUserContext } from '../../CurrentUserContext';
+import { useAtom } from 'jotai';
+import currentUserAtom from '../../CurrentUserAtom';
 
 interface NavLinkProps {
   to: string;
@@ -19,7 +21,7 @@ function NavLink({ to, children }: NavLinkProps) {
 }
 
 function NavBar() {
-  const currentUser = useContext(CurrentUserContext);
+  const [currentUser, _] = useAtom(currentUserAtom);
 
   const isLogedIn = currentUser === null;
 

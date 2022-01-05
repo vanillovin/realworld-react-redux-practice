@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { SetCurrentUserContext } from '../../CurrentUserContext';
+import { useAtom } from 'jotai';
+import currentUserAtom from '../../CurrentUserAtom';
 import { EMAIL_OPTION, PASSWORD_OPTION } from '../validation';
 
 interface SignInFormData {
@@ -19,7 +20,7 @@ function SignIn() {
     },
   });
 
-  const setCurrentUser = useContext(SetCurrentUserContext);
+  const [_, setCurrentUser] = useAtom(currentUserAtom);
 
   // v6 useHistory -> useNavigate
   // https://velog.io/@soryeongk/ReactRouterDomV6

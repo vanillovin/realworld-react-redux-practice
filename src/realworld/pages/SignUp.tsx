@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import { useAtom } from 'jotai';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { SetCurrentUserContext } from '../../CurrentUserContext';
+import currentUserAtom from '../../CurrentUserAtom';
 import { EMAIL_OPTION, PASSWORD_OPTION } from '../validation';
 
 interface SignUpFD {
@@ -23,7 +24,7 @@ const SignUp = () => {
       password: '',
     },
   });
-  const setCurrentUser = useContext(SetCurrentUserContext);
+  const [_, setCurrentUser] = useAtom(currentUserAtom);
   const navigate = useNavigate();
 
   const onSubmit = (data: SignUpFD) => {
