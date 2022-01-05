@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import ArticlePreview from '../components/ArticlePreview';
 import { useQuery, useQueryClient } from 'react-query';
+import { Link, useSearchParams } from 'react-router-dom';
 
 // type vs interface (넓은 개념)
 // (컴포넌트와 컴포넌트 사이의 props)
@@ -30,13 +31,23 @@ interface ArticlesResponse {
 }
 
 function Home() {
+  let [searchParams, setSearchParams] = useSearchParams();
+  const selectedTag = searchParams.get('tag');
+  console.log(selectedTag);
+
+  // ? 뒤에
+  // /shoes  ?brand=nike&sort=asc&sortby=price
+  // searchParmas.get('brand') // nike
+  // http://localhost:3000 (host)  /  ?tag=introduction (searchParams)
   // https://react-query.tanstack.com/overview
+  // 태그가 없으면 tag === null or string?
   const { isLoading, error, data } = useQuery<ArticlesResponse, Error>(
-    'Articles',
+    'Articles' + (selectedTag !== null ? `&tag=${selectedTag}` : ''),
     () =>
-      fetch('https://api.realworld.io/api/articles?limit=10&offset=0').then(
-        (res) => res.json()
-      )
+      fetch(
+        'https://api.realworld.io/api/articles?limit=10&offset=0' +
+          (selectedTag !== null ? `&tag=${selectedTag}` : '')
+      ).then((res) => res.json())
   );
 
   const queryClient = useQueryClient();
@@ -55,10 +66,20 @@ function Home() {
             <div className="feed-toggle">
               <ul className="nav nav-pills outline-active">
                 <li className="nav-item">
-                  <a href="" className="nav-link active">
+                  <Link to="/" className="nav-link active">
                     Global Feed
-                  </a>
+                  </Link>
                 </li>
+                {selectedTag !== null && (
+                  <li className="nav-item">
+                    <Link
+                      to={`/?tag=${selectedTag}`}
+                      className="nav-link active"
+                    >
+                      #{selectedTag}
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
             <div>
@@ -81,7 +102,22 @@ function Home() {
           <div className="col-md-3">
             <div className="sidebar">
               <p>Popular Tags</p>
-              <div className="tag-list"></div>
+              <div className="tag-list">
+                {[
+                  'welcome',
+                  'implementations',
+                  'codebaseShow',
+                  'introduction',
+                ].map((tag) => (
+                  <Link
+                    key={tag}
+                    to={'/?tag=' + tag}
+                    className="tag-default tag-pill"
+                  >
+                    {tag}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>
