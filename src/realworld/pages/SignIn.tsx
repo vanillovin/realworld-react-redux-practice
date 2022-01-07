@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import currentUserAtom from '../../CurrentUserAtom';
 import { EMAIL_OPTION, PASSWORD_OPTION } from '../validation';
+import api from '../api';
 
 interface SignInFormData {
   email: string;
@@ -28,14 +29,17 @@ function SignIn() {
   const navigate = useNavigate();
 
   const onSubmit = (data: SignInFormData) => {
-    console.log('onSubmit data', data);
+    // https://frw.nsidnev.dev/docs
+    // 제출하면...
 
-    setCurrentUser({
-      email: data.email,
-      username: '사용자',
-      token: 'test',
-      image: 'https://api.realworld.io/images/demo-avatar.png',
-    });
+    // interface => 계약, 약속 => 쉽게 변경할 수 없어요!
+    // api에 fetch로 post 요청을 보내고...
+
+    // 응답을 받으면... res => json body를 꺼내고
+    // body에서 user를 꺼내서
+    // setCurrentUser로 넣어준다
+    //
+    api.login(data).then((body) => setCurrentUser(body.user));
 
     navigate('/');
   };

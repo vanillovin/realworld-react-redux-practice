@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import currentUserAtom from '../../CurrentUserAtom';
 import { EMAIL_OPTION, PASSWORD_OPTION } from '../validation';
+import api from '../api';
 
 interface SignUpFD {
   username: string;
@@ -30,12 +31,7 @@ const SignUp = () => {
   const onSubmit = (data: SignUpFD) => {
     console.log('onSubmit data', data);
 
-    setCurrentUser({
-      email: data.email,
-      username: '사용자',
-      token: 'test',
-      image: 'https://api.realworld.io/images/demo-avatar.png',
-    });
+    api.register(data).then((body) => setCurrentUser(body.user));
 
     navigate('/');
   };

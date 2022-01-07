@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import ArticlePreview from '../components/ArticlePreview';
 import { useQuery, useQueryClient } from 'react-query';
+
+//         v5  useQuery
 import { Link, useSearchParams } from 'react-router-dom';
 
 // type vs interface (넓은 개념)
@@ -31,22 +33,26 @@ interface ArticlesResponse {
 }
 
 function Home() {
-  let [searchParams, setSearchParams] = useSearchParams();
-  const selectedTag = searchParams.get('tag');
-  console.log(selectedTag);
-
   // ? 뒤에
   // /shoes  ?brand=nike&sort=asc&sortby=price
   // searchParmas.get('brand') // nike
+
   // http://localhost:3000 (host)  /  ?tag=introduction (searchParams)
   // https://react-query.tanstack.com/overview
   // 태그가 없으면 tag === null or string?
+  // *캐시 키가 달라지면 함수를 다시 호출함
+
+  let [searchParams, _] = useSearchParams();
+  const selectedTag = searchParams.get('tag');
+  console.log(selectedTag);
+
+  const queryString = selectedTag === null ? `&tag=${selectedTag}` : '';
+
   const { isLoading, error, data } = useQuery<ArticlesResponse, Error>(
-    'Articles' + (selectedTag !== null ? `&tag=${selectedTag}` : ''),
+    'Articles' + queryString,
     () =>
       fetch(
-        'https://api.realworld.io/api/articles?limit=10&offset=0' +
-          (selectedTag !== null ? `&tag=${selectedTag}` : '')
+        'https://api.realworld.io/api/articles?limit=10&offset=0' + queryString
       ).then((res) => res.json())
   );
 
@@ -87,7 +93,7 @@ function Home() {
                 onClick={() => {
                   // https://react-query.tanstack.com/guides/query-invalidation
                   // https://react-query.tanstack.com/reference/useQueryClient#_top
-                  queryClient.invalidateQueries('Articles');
+                  queryClient.invalidateQueries('Articles' + queryString);
                 }}
               >
                 다시 요청하기
